@@ -1,0 +1,42 @@
+.backgroundImage {
+  height: 100vh;
+  width: 100vw;
+  background-image: url("../../assets/bg.jpg");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-color: rgba(0, 0, 0, 0.247);
+}
+
+.backgroundImage .after {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.6);
+}
+
+.landingScreenContainer {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 4rem;
+
+  margin: 0 auto;
+  max-width: 1000px;
+  padding: 2rem;
+  text-align: center;
+
+  z-index: 999;
+}
+
+.landingScreenContainer h1 {
+  font-size: 64px;
+}
+
+.landingScreenContainer h3 {
+  font-size: 24px;
+}

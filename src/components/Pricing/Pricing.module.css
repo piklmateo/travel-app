@@ -1,0 +1,30 @@
+.pricingContainer {
+  min-height: 100vh;
+  background-color: var(--color-dark--1);
+}
+
+.pricingGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  place-items: center;
+  gap: 4rem;
+}
+
+.pricingContent {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.pricingContent h1 {
+  font-size: 32px;
+  text-align: start;
+}
+
+.pricingContent p {
+  text-align: start;
+}
+
+.pricingImg {
+  width: 100%;
+}

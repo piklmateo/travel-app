@@ -1,0 +1,30 @@
+.productContainer {
+  min-height: 100vh;
+  background-color: var(--color-dark--1);
+}
+
+.productGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  place-items: center;
+  gap: 4rem;
+}
+
+.productContent {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.productContent h1 {
+  font-size: 32px;
+  text-align: start;
+}
+
+.productContent p {
+  text-align: start;
+}
+
+.productImg {
+  width: 100%;
+}
