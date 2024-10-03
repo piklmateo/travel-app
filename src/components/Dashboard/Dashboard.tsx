@@ -1,9 +1,12 @@
 import SidebarPanel from "../SidebarPanel/SidebarPanel";
+import Map from "../Map/Map";
+import styles from "./Dashboard.module.css";
 
 const Dashboard = () => {
   return (
-    <div>
+    <div className={styles.dashboardContainer}>
       <SidebarPanel />
+      <Map />
     </div>
   );
 };

@@ -1,0 +1,4 @@
+.mapContainer {
+  min-height: 100vh;
+  background-color: var(--color-dark--2);
+}
