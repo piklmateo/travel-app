@@ -1,0 +1,29 @@
+.sidebarPanelContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background-color: var(--color-dark--1);
+  color: var(--color-light--2);
+  min-height: 100vh;
+  gap: 2rem;
+}
+
+.sidebarPaneNavigation {
+  margin-top: 10rem;
+  background-color: var(--color-dark--2);
+  border-radius: 8px;
+  padding: 0.4rem 1rem;
+}
+
+.sidebarPaneNavigation ul {
+  display: flex;
+  gap: 1rem;
+}
+
+.navLink {
+  list-style: none;
+  text-decoration: none;
+  color: var(--color-light--2);
+  border: none;
+  cursor: pointer;
+}

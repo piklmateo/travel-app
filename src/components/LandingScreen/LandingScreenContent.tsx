@@ -1,4 +1,5 @@
 import styles from "./LandingScreenContent.module.css";
+import { Link } from "react-router-dom";
 
 const LandingScreenContent = () => {
   return (
@@ -10,7 +11,9 @@ const LandingScreenContent = () => {
         architecto sit delectus. Rem officia consequatur cupiditate beatae
         suscipit expedita est odit.
       </h3>
-      <button className="btn btn-primary">START TRACKING NOW</button>
+      <Link to="/app">
+        <button className="btn btn-primary">START TRACKING NOW</button>
+      </Link>
     </div>
   );
 };
