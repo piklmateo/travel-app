@@ -1,25 +1,23 @@
-import { NavLink } from "react-router-dom";
+import { NavLink, Outlet } from "react-router-dom";
 import styles from "./SidebarPanel.module.css";
 
 const SidebarPanel = () => {
   return (
     <div className={styles.sidebarPanelContainer}>
-      <nav className={styles.sidebarPaneNavigation}>
+      <nav className={styles.nav}>
         <ul>
           <li>
-            <NavLink className={styles.navLink} to="/cities">
-              Cities
-            </NavLink>
+            <NavLink to="cities">Cities</NavLink>
           </li>
           <li>
-            <NavLink className={styles.navLink} to="/countries">
-              Countries
-            </NavLink>
+            <NavLink to="countries">Countries</NavLink>
           </li>
         </ul>
       </nav>
 
-      <div className={styles.sidebarContent}>Content</div>
+      <div className={styles.sidebarContent}>
+        <Outlet />
+      </div>
     </div>
   );
 };

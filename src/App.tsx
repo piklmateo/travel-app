@@ -5,19 +5,31 @@ import PricingPage from "./pages/PricingPage";
 import ProductPage from "./pages/ProductPage";
 import LoginPage from "./pages/LoginPage";
 import DashboardPage from "./pages/DashboardPage";
+import CityList from "./components/CityList/CityList";
+import CountryList from "./components/CountryList/CountryList";
+import { CitiesProvider } from "./contexts/CityContext";
+import CityForm from "./components/CityForm/CityForm";
+import CityInfo from "./components/CityInfo/CityInfo";
 
 function App() {
   return (
     <div>
-      <BrowserRouter>
-        <Routes>
-          <Route index element={<HomePage />} />
-          <Route element={<PricingPage />} path="/pricing" />
-          <Route element={<ProductPage />} path="/product" />
-          <Route element={<LoginPage />} path="/login" />
-          <Route element={<DashboardPage />} path="/app" />
-        </Routes>
-      </BrowserRouter>
+      <CitiesProvider>
+        <BrowserRouter>
+          <Routes>
+            <Route index element={<HomePage />} />
+            <Route element={<PricingPage />} path="/pricing" />
+            <Route element={<ProductPage />} path="/product" />
+            <Route element={<LoginPage />} path="/login" />
+            <Route element={<DashboardPage />} path="/app">
+              <Route element={<CityList />} path="cities" />
+              <Route element={<CityInfo />} path="cities/:id" />
+              <Route element={<CountryList />} path="countries" />
+              <Route element={<CityForm />} path="new" />
+            </Route>
+          </Routes>
+        </BrowserRouter>
+      </CitiesProvider>
     </div>
   );
 }

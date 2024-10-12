@@ -1,5 +1,6 @@
 .dashboardContainer {
   display: grid;
   grid-template-columns: 1fr 2fr;
+  height: 100vh;
   background-color: var(--color-dark--2);
 }

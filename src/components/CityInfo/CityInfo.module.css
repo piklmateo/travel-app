@@ -1,0 +1,33 @@
+.cityInfoContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  min-width: 300px;
+  padding: 2rem;
+  margin: 2rem;
+  border-radius: 8px;
+  background-color: var(--color-dark--2);
+}
+
+.infoGroup p:nth-child(1) {
+  color: var(--color-light--1);
+  font-size: smaller;
+  text-transform: uppercase;
+}
+
+.infoGroup p:nth-child(2) {
+  font-weight: bold;
+  font-size: larger;
+}
+
+.btnBack {
+  background-color: var(--color-dark--1);
+  color: var(--color-light--2);
+  max-width: 35%;
+  transition: 200ms ease-in-out;
+}
+
+.btnBack:hover {
+  background-color: var(--color-light--1);
+  color: var(--color-light--2);
+}

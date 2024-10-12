@@ -1,0 +1,46 @@
+.cityListContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  align-items: center;
+  justify-content: center;
+  padding-inline: 2rem;
+  min-width: 400px;
+}
+
+.cityListItemInfo {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+  justify-items: center;
+}
+
+.cityListItemInfo p:nth-of-type(3) {
+  font-size: 1rem;
+}
+
+.cityListItem {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: var(--color-dark--2);
+  padding: 1rem;
+  width: 100%;
+  border-radius: 8px;
+  border-left: 8px solid var(--color-brand--2);
+}
+
+.removeBtn {
+  background-color: var(--color-dark--1);
+  color: var(--color-light--2);
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+  transition: 200ms ease-in-out;
+  font-size: 1.5rem;
+  padding: 2px 10px;
+}
+
+.removeBtn:hover {
+  color: var(--color-brand--1);
+}
