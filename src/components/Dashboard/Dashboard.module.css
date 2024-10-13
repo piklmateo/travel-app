@@ -3,4 +3,14 @@
   grid-template-columns: 1fr 3fr;
   height: 100vh;
   background-color: var(--color-dark--2);
+  transition: 100ms ease-in;
+}
+
+.dashboardContainerClosed {
+  display: grid;
+  grid-template-columns: 1fr 30fr;
+  height: 100vh;
+  width: 100%;
+  background-color: var(--color-dark--2);
+  transition: 100ms ease-out;
 }

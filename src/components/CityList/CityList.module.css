@@ -28,6 +28,7 @@
   width: 100%;
   border-radius: 8px;
   border-left: 8px solid var(--color-brand--2);
+  cursor: pointer;
 }
 
 .removeBtn {

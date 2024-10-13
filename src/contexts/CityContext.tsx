@@ -1,4 +1,4 @@
-import { createContext, useContext, useReducer, ReactNode, FormEvent, useCallback } from "react";
+import { createContext, useContext, useReducer, ReactNode, FormEvent, useCallback, useState } from "react";
 import { deleteCity, fetchCities, fetchCity, insertCity } from "../services/cityService";
 
 export interface City {
@@ -70,6 +70,8 @@ interface CitiesContextType {
   getCity: (id: string) => Promise<void>;
   handleInsertCity: (city: NewCity) => Promise<void>;
   handleDeleteCity: (id: string, e: FormEvent) => Promise<void>;
+  handleCloseSidebar: () => void;
+  isOpen: boolean;
 }
 
 const CitiesContext = createContext<CitiesContextType | undefined>(undefined);
@@ -80,6 +82,7 @@ interface CitiesProviderProps {
 
 const CitiesProvider = ({ children }: CitiesProviderProps) => {
   const [{ cities, currentCity }, dispatch] = useReducer(reducer, initialState);
+  const [isOpen, setIsOpen] = useState<boolean>(true);
 
   const getCities = useCallback(async () => {
     try {
@@ -112,6 +115,10 @@ const CitiesProvider = ({ children }: CitiesProviderProps) => {
     }
   };
 
+  const handleCloseSidebar = () => {
+    setIsOpen(!isOpen);
+  };
+
   return (
     <CitiesContext.Provider
       value={{
@@ -122,6 +129,8 @@ const CitiesProvider = ({ children }: CitiesProviderProps) => {
         getCity,
         handleInsertCity,
         handleDeleteCity,
+        handleCloseSidebar,
+        isOpen,
       }}
     >
       {children}

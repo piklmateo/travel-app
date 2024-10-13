@@ -10,27 +10,30 @@ import CountryList from "./components/CountryList/CountryList";
 import { CitiesProvider } from "./contexts/CityContext";
 import CityForm from "./components/CityForm/CityForm";
 import CityInfo from "./components/CityInfo/CityInfo";
+import { SidebarProvider } from "./contexts/SidebarContext";
 
 function App() {
   return (
     <div>
-      <CitiesProvider>
-        <BrowserRouter>
-          <Routes>
-            <Route index element={<HomePage />} />
-            <Route element={<PricingPage />} path="/pricing" />
-            <Route element={<ProductPage />} path="/product" />
-            <Route element={<LoginPage />} path="/login" />
-            <Route element={<DashboardPage />} path="/app">
-              <Route index element={<Navigate replace to="cities" />} />
-              <Route element={<CityList />} path="cities" />
-              <Route element={<CityInfo />} path="cities/:id" />
-              <Route element={<CountryList />} path="countries" />
-              <Route element={<CityForm />} path="new" />
-            </Route>
-          </Routes>
-        </BrowserRouter>
-      </CitiesProvider>
+      <SidebarProvider>
+        <CitiesProvider>
+          <BrowserRouter>
+            <Routes>
+              <Route index element={<HomePage />} />
+              <Route element={<PricingPage />} path="/pricing" />
+              <Route element={<ProductPage />} path="/product" />
+              <Route element={<LoginPage />} path="/login" />
+              <Route element={<DashboardPage />} path="/app">
+                <Route index element={<Navigate replace to="cities" />} />
+                <Route element={<CityList />} path="cities" />
+                <Route element={<CityInfo />} path="cities/:id" />
+                <Route element={<CountryList />} path="countries" />
+                <Route element={<CityForm />} path="new" />
+              </Route>
+            </Routes>
+          </BrowserRouter>
+        </CitiesProvider>
+      </SidebarProvider>
     </div>
   );
 }
