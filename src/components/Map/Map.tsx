@@ -1,17 +1,18 @@
-import { useNavigate, useSearchParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import styles from "./Map.module.css";
-import { MapContainer, TileLayer, Marker, Popup, useMapEvents, useMap } from "react-leaflet";
+import { MapContainer, TileLayer, Marker, Popup, useMapEvents } from "react-leaflet";
 import { useEffect, useState } from "react";
 import { useCities } from "../../contexts/CityContext";
+import Button from "../FormComponents/Button";
+import { useGeolocation } from "../../hooks/useGeolocation";
+import { useURLLocation } from "../../hooks/useUrlLocation";
 
 const Map = () => {
   const navigate = useNavigate();
   const { cities, getCities } = useCities();
+  const { position, getPosition } = useGeolocation();
   const [selectedPosition, setSelectedPosition] = useState<{ lat: number; lng: number } | null>(null);
-  const [selectedCityPosition, setSelectedCityPosition] = useState<{ lat: number; lng: number } | null>(null);
-  const [searchParams] = useSearchParams();
-  const lat = searchParams.get("lat");
-  const lng = searchParams.get("lng");
+  const { lat, lng } = useURLLocation();
 
   useEffect(() => {
     const loadCities = async () => {
@@ -27,12 +28,14 @@ const Map = () => {
         lat: Number(lat),
         lng: Number(lng),
       };
-      setSelectedCityPosition(selectedCity);
+      setSelectedPosition(selectedCity);
+    } else {
+      setSelectedPosition(null);
     }
   }, [lat, lng]);
 
   const SelectedMarker = () => {
-    useMapEvents({
+    const map = useMapEvents({
       click(e) {
         const newPosition = {
           lat: e.latlng.lat,
@@ -43,29 +46,43 @@ const Map = () => {
       },
     });
 
-    return selectedPosition && lat && lng ? (
-      <Marker position={[Number(lat), Number(lng)]}>
-        <Popup>nekvi popup</Popup>
+    useEffect(() => {
+      if (selectedPosition) {
+        map.setView(selectedPosition);
+      }
+    }, [map]);
+
+    return selectedPosition ? (
+      <Marker position={[selectedPosition.lat, selectedPosition.lng]}>
+        <Popup>Selected Position</Popup>
       </Marker>
     ) : null;
   };
 
-  function ChangeCenter({ position }) {
-    const map = useMap();
-    if (position) {
-      map.setView(position);
+  const handleUserPosition = () => {
+    getPosition();
+
+    if (position?.lat && position?.lng) {
+      const userPosition = {
+        lat: position.lat,
+        lng: position.lng,
+      };
+      setSelectedPosition(userPosition);
+    } else {
+      console.error("User position is undefined");
+      setSelectedPosition(null);
     }
-    return null;
-  }
+  };
 
   return (
     <div className={styles.mapContainer}>
+      <Button onClick={handleUserPosition} className={`btn btn-primary ${styles.btnPosition} `}>
+        Use your position
+      </Button>
       <MapContainer
         className={styles.map}
         center={
-          selectedCityPosition
-            ? [selectedCityPosition.lat, selectedCityPosition.lng]
-            : [52.32191088594773, 13.403320312500002]
+          selectedPosition ? [selectedPosition.lat, selectedPosition.lng] : [52.32191088594773, 13.403320312500002]
         }
         zoom={8}
         scrollWheelZoom={true}
@@ -81,7 +98,6 @@ const Map = () => {
             </Marker>
           ))}
         <SelectedMarker />
-        <ChangeCenter position={selectedCityPosition} />
       </MapContainer>
     </div>
   );

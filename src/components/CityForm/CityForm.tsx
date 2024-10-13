@@ -1,8 +1,9 @@
-import { useNavigate, useSearchParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import Button from "../FormComponents/Button";
 import styles from "./CityForm.module.css";
 import { FormEvent, useState } from "react";
 import { NewCity, useCities } from "../../contexts/CityContext";
+import { useURLLocation } from "../../hooks/useUrlLocation";
 
 const CityForm = () => {
   const navigate = useNavigate();
@@ -11,9 +12,7 @@ const CityForm = () => {
   const [countryName, setCountryName] = useState<string>("");
   const [date, setDate] = useState<string>("");
   const [info, setInfo] = useState<string>("");
-  const [searchParams] = useSearchParams();
-  const lat = searchParams.get("lat");
-  const lang = searchParams.get("lng");
+  const { lat, lng: lang } = useURLLocation();
 
   const handleCancel = (e: FormEvent) => {
     e.preventDefault();
