@@ -21,7 +21,13 @@ const CityList = () => {
     <ul className={styles.cityListContainer}>
       {cities === undefined || cities.length > 0 ? (
         cities.map((city) => (
-          <li onClick={() => navigate(`${city.id}`)} className={styles.cityListItem} key={city.id}>
+          <li
+            onClick={() =>
+              navigate(`${city.id}?lat=${city.position.lat?.toString()}&lng=${city.position.lng?.toString()}`)
+            }
+            className={styles.cityListItem}
+            key={city.id}
+          >
             <div className={styles.cityListItemInfo}>
               <p>{city.emoji}</p>
               <p>{city.cityName}</p>
