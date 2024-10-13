@@ -7,24 +7,29 @@ const CountryList = () => {
 
   useEffect(() => {
     const loadCities = async () => {
-      if (cities.length === 0) {
-        await getCities();
-      }
+      await getCities();
     };
 
     loadCities();
-  }, [cities.length, getCities]);
+  }, [getCities]);
 
   return (
     <div>
-      <ul className={styles.countriesGrid}>
-        {cities.map((city) => (
-          <li className={styles.countriesGridItem} key={city.id}>
-            <p>{city.emoji}</p>
-            <p>{city.country}</p>
-          </li>
-        ))}
-      </ul>
+      {!cities || cities.length > 0 ? (
+        <ul className={styles.countriesGrid}>
+          {cities.map((city) => (
+            <li className={styles.countriesGridItem} key={city.id}>
+              <p>{city.emoji}</p>
+              <p>{city.country}</p>
+            </li>
+          ))}
+        </ul>
+      ) : (
+        <div className="center">
+          <p>No countries available.</p>
+          <p>Start exploring.</p>
+        </div>
+      )}
     </div>
   );
 };

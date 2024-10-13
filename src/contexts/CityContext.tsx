@@ -1,5 +1,5 @@
-import { createContext, useContext, useReducer, ReactNode } from "react";
-import { fetchCities, fetchCity } from "../services/cityService";
+import { createContext, useContext, useReducer, ReactNode, FormEvent, useCallback } from "react";
+import { deleteCity, fetchCities, fetchCity, insertCity } from "../services/cityService";
 
 export interface City {
   cityName: string;
@@ -11,7 +11,19 @@ export interface City {
     lat: number | null;
     lng: number | null;
   };
-  id: number | null;
+  id: string;
+}
+
+export interface NewCity {
+  cityName: string;
+  country: string;
+  emoji: string;
+  date: string;
+  notes: string;
+  position: {
+    lat: number | null;
+    lng: number | null;
+  };
 }
 
 const initialState = {
@@ -19,7 +31,7 @@ const initialState = {
   currentCity: null as City | null,
 };
 
-type Action = { type: "cities/loaded"; payload: City[] } | { type: "city/add"; payload: City } | { type: "city/remove"; payload: number } | { type: "city/loaded"; payload: City };
+type Action = { type: "cities/loaded"; payload: City[] } | { type: "cities/add"; payload: City } | { type: "city/remove"; payload: string } | { type: "city/loaded"; payload: City };
 
 const reducer = (state = initialState, action: Action) => {
   switch (action.type) {
@@ -28,17 +40,17 @@ const reducer = (state = initialState, action: Action) => {
         ...state,
         cities: action.payload,
       };
+    case "cities/add":
+      return {
+        ...state,
+        cities: [...state.cities, action.payload],
+      };
     case "city/loaded":
       return {
         ...state,
         currentCity: action.payload,
       };
 
-    case "city/add":
-      return {
-        ...state,
-        cities: [...state.cities, action.payload],
-      };
     case "city/remove":
       return {
         ...state,
@@ -55,7 +67,9 @@ interface CitiesContextType {
   currentCity: City | null;
   dispatch: React.Dispatch<Action>;
   getCities: () => Promise<void>;
-  getCity: (id: number) => Promise<void>;
+  getCity: (id: string) => Promise<void>;
+  handleInsertCity: (city: NewCity) => Promise<void>;
+  handleDeleteCity: (id: string, e: FormEvent) => Promise<void>;
 }
 
 const CitiesContext = createContext<CitiesContextType | undefined>(undefined);
@@ -67,14 +81,35 @@ interface CitiesProviderProps {
 const CitiesProvider = ({ children }: CitiesProviderProps) => {
   const [{ cities, currentCity }, dispatch] = useReducer(reducer, initialState);
 
-  const getCities = async () => {
-    const data = await fetchCities();
-    dispatch({ type: "cities/loaded", payload: data });
-  };
+  const getCities = useCallback(async () => {
+    try {
+      const data = await fetchCities();
+      dispatch({ type: "cities/loaded", payload: data });
+    } catch (error) {
+      console.error(error);
+      dispatch({ type: "cities/loaded", payload: [] });
+    }
+  }, [dispatch]);
 
-  const getCity = async (id: number) => {
+  const getCity = async (id: string) => {
     const data = await fetchCity(id);
     dispatch({ type: "city/loaded", payload: data });
+  };
+
+  const handleInsertCity = async (newCity: NewCity) => {
+    const res = await insertCity(newCity);
+    if (res) {
+      const updatedCities = await fetchCities();
+      dispatch({ type: "cities/loaded", payload: updatedCities });
+    }
+  };
+
+  const handleDeleteCity = async (id: string, e: FormEvent) => {
+    e.stopPropagation();
+    const res = await deleteCity(id);
+    if (res) {
+      dispatch({ type: "city/remove", payload: id });
+    }
   };
 
   return (
@@ -85,6 +120,8 @@ const CitiesProvider = ({ children }: CitiesProviderProps) => {
         dispatch,
         getCities,
         getCity,
+        handleInsertCity,
+        handleDeleteCity,
       }}
     >
       {children}

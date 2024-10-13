@@ -6,6 +6,12 @@
   color: var(--color-light--2);
   min-height: 100vh;
   gap: 2rem;
+  overflow-y: scroll;
+  overflow-x: hidden;
+}
+
+.sidebarPanelContainer::-webkit-scrollbar {
+  display: none;
 }
 
 .nav {

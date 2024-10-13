@@ -12,9 +12,9 @@ const CityInfo = () => {
 
   useEffect(() => {
     const loadCityData = async () => {
-      if (id && (!currentCity || currentCity.id !== Number(id))) {
+      if (id && (!currentCity || currentCity.id?.toString() !== id)) {
         try {
-          await getCity(Number(id));
+          await getCity(id);
         } catch (error) {
           console.error("Failed to fetch city data:", error);
         }
