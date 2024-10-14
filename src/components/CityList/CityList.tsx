@@ -4,9 +4,10 @@ import styles from "./CityList.module.css";
 import { formatDate } from "../../utils/globalFunctions";
 import Button from "../FormComponents/Button";
 import { useNavigate } from "react-router-dom";
+import { ScaleLoader } from "react-spinners";
 
 const CityList = () => {
-  const { cities, getCities, handleDeleteCity } = useCities();
+  const { cities, getCities, handleDeleteCity, isLoading } = useCities();
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -16,6 +17,14 @@ const CityList = () => {
 
     loadCities();
   }, [getCities]);
+
+  if (isLoading) {
+    return (
+      <div className={styles.cityListContainer}>
+        <ScaleLoader color="#ffb545" />
+      </div>
+    );
+  }
 
   return (
     <ul className={styles.cityListContainer}>

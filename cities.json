@@ -35,6 +35,30 @@
         "lng": "-2.13128394200588"
       },
       "id": "98443198"
+    },
+    {
+      "id": "494b",
+      "cityName": "Dusseldorf",
+      "country": "Germany",
+      "emoji": "nes",
+      "date": "2024-10-13",
+      "notes": "Narkos",
+      "position": {
+        "lat": 51.02757633780243,
+        "lng": 6.723632812500001
+      }
+    },
+    {
+      "id": "da41",
+      "cityName": "Kessel",
+      "country": "Germany",
+      "emoji": "nes",
+      "date": "2024-10-17",
+      "notes": "Kessel",
+      "position": {
+        "lat": 51.303145259199084,
+        "lng": 9.624023437500002
+      }
     }
   ]
 }

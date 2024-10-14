@@ -1,9 +1,10 @@
 import { useEffect } from "react";
 import { useCities } from "../../contexts/CityContext";
 import styles from "./CountryList.module.css";
+import { ScaleLoader } from "react-spinners";
 
 const CountryList = () => {
-  const { cities, getCities } = useCities();
+  const { cities, getCities, isLoading } = useCities();
 
   useEffect(() => {
     const loadCities = async () => {
@@ -12,6 +13,14 @@ const CountryList = () => {
 
     loadCities();
   }, [getCities]);
+
+  if (isLoading) {
+    return (
+      <div className={styles.cityListContainer}>
+        <ScaleLoader color="#ffb545" />
+      </div>
+    );
+  }
 
   return (
     <div>

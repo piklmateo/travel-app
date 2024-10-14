@@ -29,32 +29,44 @@ export interface NewCity {
 const initialState = {
   cities: [] as City[],
   currentCity: null as City | null,
+  isLoading: false,
 };
 
-type Action = { type: "cities/loaded"; payload: City[] } | { type: "cities/add"; payload: City } | { type: "city/remove"; payload: string } | { type: "city/loaded"; payload: City };
+type Action =
+  | { type: "cities/loaded"; payload: City[] }
+  | { type: "cities/add"; payload: City }
+  | { type: "city/remove"; payload: string }
+  | { type: "city/loaded"; payload: City }
+  | { type: "loading" };
 
 const reducer = (state = initialState, action: Action) => {
   switch (action.type) {
+    case "loading":
+      return { ...state, isLoading: true };
     case "cities/loaded":
       return {
         ...state,
         cities: action.payload,
+        isLoading: false,
       };
     case "cities/add":
       return {
         ...state,
         cities: [...state.cities, action.payload],
+        isLoading: false,
       };
     case "city/loaded":
       return {
         ...state,
         currentCity: action.payload,
+        isLoading: false,
       };
 
     case "city/remove":
       return {
         ...state,
         cities: state.cities.filter((city) => city.id !== action.payload),
+        isLoading: false,
       };
 
     default:
@@ -72,6 +84,7 @@ interface CitiesContextType {
   handleDeleteCity: (id: string, e: FormEvent) => Promise<void>;
   handleCloseSidebar: () => void;
   isOpen: boolean;
+  isLoading: boolean;
 }
 
 const CitiesContext = createContext<CitiesContextType | undefined>(undefined);
@@ -81,10 +94,11 @@ interface CitiesProviderProps {
 }
 
 const CitiesProvider = ({ children }: CitiesProviderProps) => {
-  const [{ cities, currentCity }, dispatch] = useReducer(reducer, initialState);
+  const [{ cities, currentCity, isLoading }, dispatch] = useReducer(reducer, initialState);
   const [isOpen, setIsOpen] = useState<boolean>(true);
 
   const getCities = useCallback(async () => {
+    dispatch({ type: "loading" });
     try {
       const data = await fetchCities();
       dispatch({ type: "cities/loaded", payload: data });
@@ -95,11 +109,13 @@ const CitiesProvider = ({ children }: CitiesProviderProps) => {
   }, [dispatch]);
 
   const getCity = async (id: string) => {
+    dispatch({ type: "loading" });
     const data = await fetchCity(id);
     dispatch({ type: "city/loaded", payload: data });
   };
 
   const handleInsertCity = async (newCity: NewCity) => {
+    dispatch({ type: "loading" });
     const res = await insertCity(newCity);
     if (res) {
       const updatedCities = await fetchCities();
@@ -108,6 +124,7 @@ const CitiesProvider = ({ children }: CitiesProviderProps) => {
   };
 
   const handleDeleteCity = async (id: string, e: FormEvent) => {
+    dispatch({ type: "loading" });
     e.stopPropagation();
     const res = await deleteCity(id);
     if (res) {
@@ -131,6 +148,7 @@ const CitiesProvider = ({ children }: CitiesProviderProps) => {
         handleDeleteCity,
         handleCloseSidebar,
         isOpen,
+        isLoading,
       }}
     >
       {children}
