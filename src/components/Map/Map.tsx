@@ -5,11 +5,11 @@ import { useEffect, useState } from "react";
 import { useCities } from "../../contexts/CityContext";
 import Button from "../FormComponents/Button";
 import { useGeolocation } from "../../hooks/useGeolocation";
-import { useURLLocation } from "../../hooks/useUrlLocation";
+import { useURLLocation } from "../../hooks/useURLLocation";
 
 const Map = () => {
   const navigate = useNavigate();
-  const { cities, getCities } = useCities();
+  const { cities, getCities, getCityDataApi } = useCities();
   const { position, getPosition } = useGeolocation();
   const [selectedPosition, setSelectedPosition] = useState<{ lat: number; lng: number } | null>(null);
   const { lat, lng } = useURLLocation();
@@ -37,13 +37,16 @@ const Map = () => {
 
   const SelectedMarker = () => {
     const map = useMapEvents({
-      click(e) {
+      async click(e) {
         const newPosition = {
           lat: e.latlng.lat,
           lng: e.latlng.lng,
         };
         setSelectedPosition(newPosition);
         setIsInfoDisplayed(false);
+
+        await getCityDataApi(newPosition.lat.toString(), newPosition.lng.toString());
+
         navigate(`new?lat=${newPosition.lat.toString()}&lng=${newPosition.lng.toString()}`);
       },
     });

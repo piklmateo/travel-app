@@ -37,6 +37,7 @@ const Login = () => {
               type="text"
               name="username"
               id="username"
+              value={username}
               onChange={(e) => setUsername(e.target.value)}
             />
           </div>
@@ -46,13 +47,11 @@ const Login = () => {
               type="password"
               name="password"
               id="password"
+              value={password}
               onChange={(e) => setPassword(e.target.value)}
             />
           </div>
-          <button
-            className="btn btn-primary"
-            disabled={isLoading ? true : false}
-          >
+          <button className="btn btn-primary" disabled={isLoading ? true : false}>
             {isLoading ? "Submiting" : "Login"}
           </button>
         </form>

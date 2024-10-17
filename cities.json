@@ -59,6 +59,41 @@
         "lat": 51.303145259199084,
         "lng": 9.624023437500002
       }
+    },
+    {
+      "id": "fcd2",
+      "cityName": "Toulouse",
+      "country": "France",
+      "emoji": "nes",
+      "date": "2024-10-31",
+      "notes": "Tuluze",
+      "position": {
+        "lat": 43.568451798812205,
+        "lng": 1.4117431640625002
+      }
+    },
+    {
+      "id": "b5e9",
+      "cityName": "Kyiv",
+      "country": "Ukraine",
+      "emoji": "nes",
+      "date": "2024-10-15",
+      "notes": "Kyiv",
+      "position": {
+        "lat": 50.387507803003146,
+        "lng": 30.498046875000004
+      }
+    },
+    {
+      "id": "5e6e",
+      "cityName": "Wolfsburg",
+      "country": "Germany",
+      "date": "2024-11-01",
+      "notes": "1e1e1e1",
+      "position": {
+        "lat": 52.40241887397332,
+        "lng": 10.78857421875
+      }
     }
   ]
 }

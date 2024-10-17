@@ -1,5 +1,5 @@
 import { createContext, useContext, useReducer, ReactNode, FormEvent, useCallback, useState } from "react";
-import { deleteCity, fetchCities, fetchCity, insertCity } from "../services/cityService";
+import { deleteCity, fetchCities, fetchCity, fetchCityByLatLang, insertCity } from "../services/cityService";
 
 export interface City {
   cityName: string;
@@ -17,7 +17,7 @@ export interface City {
 export interface NewCity {
   cityName: string;
   country: string;
-  emoji: string;
+  emoji: string | undefined;
   date: string;
   notes: string;
   position: {
@@ -26,10 +26,23 @@ export interface NewCity {
   };
 }
 
+export interface SelectedCity {
+  city: string;
+  countryName: string;
+  countryCode: string;
+  latitude: number;
+  longitude: number;
+  principalSubdivision: string;
+  principalSubdivisionCode: string;
+  continent: string;
+  locality?: string;
+}
+
 const initialState = {
   cities: [] as City[],
   currentCity: null as City | null,
   isLoading: false,
+  selectedCity: null as SelectedCity | null,
 };
 
 type Action =
@@ -37,6 +50,7 @@ type Action =
   | { type: "cities/add"; payload: City }
   | { type: "city/remove"; payload: string }
   | { type: "city/loaded"; payload: City }
+  | { type: "city/select"; payload: SelectedCity }
   | { type: "loading" };
 
 const reducer = (state = initialState, action: Action) => {
@@ -61,7 +75,12 @@ const reducer = (state = initialState, action: Action) => {
         currentCity: action.payload,
         isLoading: false,
       };
-
+    case "city/select":
+      return {
+        ...state,
+        selectedCity: action.payload,
+        isLoading: false,
+      };
     case "city/remove":
       return {
         ...state,
@@ -77,12 +96,15 @@ const reducer = (state = initialState, action: Action) => {
 interface CitiesContextType {
   cities: City[];
   currentCity: City | null;
+  selectedCity: SelectedCity | null;
   dispatch: React.Dispatch<Action>;
   getCities: () => Promise<void>;
   getCity: (id: string) => Promise<void>;
+  getCityDataApi: (lat: string | null, lng: string | null) => Promise<void>;
   handleInsertCity: (city: NewCity) => Promise<void>;
   handleDeleteCity: (id: string, e: FormEvent) => Promise<void>;
   handleCloseSidebar: () => void;
+
   isOpen: boolean;
   isLoading: boolean;
 }
@@ -94,7 +116,7 @@ interface CitiesProviderProps {
 }
 
 const CitiesProvider = ({ children }: CitiesProviderProps) => {
-  const [{ cities, currentCity, isLoading }, dispatch] = useReducer(reducer, initialState);
+  const [{ cities, currentCity, selectedCity, isLoading }, dispatch] = useReducer(reducer, initialState);
   const [isOpen, setIsOpen] = useState<boolean>(true);
 
   const getCities = useCallback(async () => {
@@ -132,6 +154,27 @@ const CitiesProvider = ({ children }: CitiesProviderProps) => {
     }
   };
 
+  const getCityDataApi = async (lat: string | null, lng: string | null) => {
+    dispatch({ type: "loading" });
+    try {
+      const data = await fetchCityByLatLang(lat, lng);
+      const selectedCity: SelectedCity = {
+        city: data.city,
+        countryName: data.countryName,
+        countryCode: data.countryCode,
+        latitude: data.latitude,
+        longitude: data.longitude,
+        principalSubdivision: data.principalSubdivision,
+        principalSubdivisionCode: data.principalSubdivisionCode,
+        continent: data.continent,
+        locality: data.locality,
+      };
+      dispatch({ type: "city/select", payload: selectedCity });
+    } catch (error) {
+      console.error("Error fetching city data:", error);
+    }
+  };
+
   const handleCloseSidebar = () => {
     setIsOpen(!isOpen);
   };
@@ -141,9 +184,11 @@ const CitiesProvider = ({ children }: CitiesProviderProps) => {
       value={{
         cities,
         currentCity,
+        selectedCity,
         dispatch,
         getCities,
         getCity,
+        getCityDataApi,
         handleInsertCity,
         handleDeleteCity,
         handleCloseSidebar,

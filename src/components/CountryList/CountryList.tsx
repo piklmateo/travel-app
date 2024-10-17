@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { useCities } from "../../contexts/CityContext";
+import { City, useCities } from "../../contexts/CityContext";
 import styles from "./CountryList.module.css";
 import { ScaleLoader } from "react-spinners";
 
@@ -13,6 +13,16 @@ const CountryList = () => {
 
     loadCities();
   }, [getCities]);
+  type CountryList = { country: string; emoji: string };
+
+  const countries = cities.reduce((arr: CountryList[], city: City) => {
+    if (!arr.map((el) => el.country).includes(city.country)) {
+      return [...arr, { country: city.country, emoji: city.emoji }];
+    }
+    return arr;
+  }, [] as CountryList[]);
+
+  console.log(countries);
 
   if (isLoading) {
     return (
@@ -24,10 +34,10 @@ const CountryList = () => {
 
   return (
     <div>
-      {!cities || cities.length > 0 ? (
+      {!countries || countries.length > 0 ? (
         <ul className={styles.countriesGrid}>
-          {cities.map((city) => (
-            <li className={styles.countriesGridItem} key={city.id}>
+          {countries.map((city) => (
+            <li className={styles.countriesGridItem} key={city.country}>
               <p>{city.emoji}</p>
               <p>{city.country}</p>
             </li>

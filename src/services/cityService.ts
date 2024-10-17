@@ -75,3 +75,21 @@ export const deleteCity = async (id: string) => {
     console.log(error);
   }
 };
+// "https://api.bigdatacloud.net/data/reverse-geocode-client?latitude=0&longitude=0"
+export const fetchCityByLatLang = async (lat: string | null, lang: string | null) => {
+  try {
+    const res = await fetch(
+      `https://api.bigdatacloud.net/data/reverse-geocode-client?latitude=${lat}&longitude=${lang}`
+    );
+
+    if (!res.ok) {
+      throw new Error("Couldn't fetch city by lat and lang");
+    }
+
+    const data = await res.json();
+
+    return data;
+  } catch (error) {
+    console.log(error);
+  }
+};
